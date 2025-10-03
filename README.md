@@ -50,6 +50,13 @@ The development shell also brings in `protobuf` for working with the protoc plug
 3. Build once with `vendorHash = lib.fakeSha256;` to capture the new vendor hash from the build failure output, then replace it.
 4. Rebuild via `nix build` to confirm, and regenerate or update the lock file if needed (`nix flake update`).
 
+## Repository layout
+
+- `flake.nix` – thin entry point delegating per-system outputs.
+- `nix/metadata.nix` – shared version, source and vendor hash metadata.
+- `nix/packages/` – package definitions for the Cells binaries and protoc helpers.
+- `nix/devshell.nix` – development shell configuration.
+
 ## License
 
 Pydio Cells is licensed under the AGPL-3.0-or-later. This repository only contains packaging metadata; refer to upstream for license details.
