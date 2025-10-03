@@ -1,0 +1,19 @@
+# macOS metadata
+.DS_Store
+
+# Editor junk
+*.swp
+*.swo
+*~
+
+# Direnv environment
+.direnv/
+.envrc
+
+# Nix build results
+result
+result-*
+.nix-*
+
+# Logs
+*.log
