@@ -8,6 +8,15 @@ This repository offers an opinionated flake that builds the Pydio Cells server a
 
 ## Getting Started
 
+### Packages
+
+The flake exports several build outputs:
+
+- `nix build .#default` or `.#cells` – main `cells` server binary.
+- `nix build .#cells-fuse` – offline FUSE helper to mount datasources.
+- `nix build .#protoc-gen-go-client-stub` – protoc plugin for generating Cells-specific client stubs.
+- `nix build .#protoc-gen-go-enhanced-grpc` – protoc plugin providing enhanced gRPC helpers.
+
 ### Build the binary
 
 ```
@@ -31,6 +40,8 @@ Drop into a shell with Go and `nixpkgs-fmt`:
 ```
 nix develop
 ```
+
+The development shell also brings in `protobuf` for working with the protoc plugins.
 
 ## Upgrading Pydio Cells
 
