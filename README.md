@@ -2,6 +2,13 @@
 
 Nix flake packaging for [Pydio Cells](https://github.com/pydio/cells), a self-hosted file sharing and collaboration platform.
 
+## Summary
+
+- Upstream source: [Pydio Cells](https://github.com/pydio/cells)
+- Default package: [`nix build .#cells`](#packages)
+- Auxiliary binaries: [`cells-fuse`](#packages), [`protoc-gen-go-client-stub`](#packages), [`protoc-gen-go-enhanced-grpc`](#packages)
+- Dev shell: [`nix develop`](#dev-shell)
+
 ## Overview
 
 This repository offers an opinionated flake that builds the Pydio Cells server as a Go module using `nix build`. It fetches the upstream `v4.4.15` release, wires in the vendor dependencies, and exposes the resulting `cells` binary as the default package output.
