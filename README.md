@@ -17,13 +17,22 @@ The flake exports several build outputs:
 - `nix build .#protoc-gen-go-client-stub` – protoc plugin for generating Cells-specific client stubs.
 - `nix build .#protoc-gen-go-enhanced-grpc` – protoc plugin providing enhanced gRPC helpers.
 
+Install any of them into your user profile with:
+
+```
+nix profile install .#cells
+nix profile install .#cells-fuse
+nix profile install .#protoc-gen-go-client-stub
+nix profile install .#protoc-gen-go-enhanced-grpc
+```
+
 ### Build the binary
 
 ```
 nix build .#default
 ```
 
-Once the build completes, the `cells` binary is available in `./result/bin/cells`.
+Once the build completes, the `cells` binary is available in `./result/bin/cells` or directly in your profile if you installed it via `nix profile install`.
 
 ### Run the server
 
