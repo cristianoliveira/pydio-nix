@@ -4,10 +4,14 @@ Nix flake packaging for [Pydio Cells](https://github.com/pydio/cells), a self-ho
 
 ## Summary
 
-- Upstream source: [Pydio Cells](https://github.com/pydio/cells)
-- Default package: [`nix build .#cells`](#packages)
-- Auxiliary binaries: [`cells-fuse`](#packages), [`protoc-gen-go-client-stub`](#packages), [`protoc-gen-go-enhanced-grpc`](#packages)
-- Dev shell: [`nix develop`](#dev-shell)
+- [Overview](#overview) – project goal and upstream reference
+- [Packages](#packages) – binary outputs and installation commands
+- [Installing](#installing)
+- [Build the binary](#build-the-binary)
+- [Run the server](#run-the-server)
+- [Dev shell](#dev-shell)
+- [Upgrading Pydio Cells](#upgrading-pydio-cells)
+- [Repository layout](#repository-layout)
 
 ## Overview
 
@@ -23,6 +27,8 @@ The flake exports several build outputs:
 - `nix build .#cells-fuse` – offline FUSE helper to mount datasources.
 - `nix build .#protoc-gen-go-client-stub` – protoc plugin for generating Cells-specific client stubs.
 - `nix build .#protoc-gen-go-enhanced-grpc` – protoc plugin providing enhanced gRPC helpers.
+
+### Installing
 
 Install any of them into your user profile with:
 
