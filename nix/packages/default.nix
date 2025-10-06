@@ -1,13 +1,14 @@
-{ pkgs, lib, metadata, src, buildRevision }:
+{ pkgs, lib, metadata, srcs }:
 let
-  inherit (metadata) version buildStamp vendorHashes;
+  inherit (metadata.cells) version buildStamp vendorHashes;
+  buildRevision = srcs.cells.rev or metadata.cells.source.rev;
 
-  mkLdflags = extra:
-    [ "-s" "-w" ] ++ extra;
+  mkLdflags = extra: [ "-s" "-w" ] ++ extra;
 
   cells = pkgs.buildGoModule rec {
     pname = "pydio-cells";
-    inherit version src;
+    inherit version;
+    src = srcs.cells;
 
     vendorHash = vendorHashes.cells;
 
@@ -32,7 +33,8 @@ let
 
   cellsFuse = pkgs.buildGoModule rec {
     pname = "pydio-cells-fuse";
-    inherit version src;
+    inherit version;
+    src = srcs.cells;
 
     modRoot = "cmd/cells-fuse";
     subPackages = [ "." ];
@@ -57,7 +59,8 @@ let
 
   protocGenGoClientStub = pkgs.buildGoModule {
     pname = "pydio-protoc-gen-go-client-stub";
-    inherit version src;
+    inherit version;
+    src = srcs.cells;
 
     modRoot = "cmd/protoc-gen-go-client-stub";
     subPackages = [ "." ];
@@ -77,7 +80,8 @@ let
 
   protocGenGoEnhancedGrpc = pkgs.buildGoModule {
     pname = "pydio-protoc-gen-go-enhanced-grpc";
-    inherit version src;
+    inherit version;
+    src = srcs.cells;
 
     modRoot = "cmd/protoc-gen-go-enhanced-grpc";
     subPackages = [ "." ];
@@ -95,10 +99,34 @@ let
     };
   };
 
+  cellsClient = pkgs.buildGoModule rec {
+    pname = "pydio-cells-client";
+    version = metadata."cells-client".version;
+    src = srcs.cells-client;
+
+    vendorHash = metadata."cells-client".vendorHash;
+    subPackages = [ "." ];
+    ldflags = mkLdflags [
+      "-X github.com/pydio/cells-client/v4/common.Version=${version}"
+    ];
+
+    doCheck = false;
+
+    meta = with lib; {
+      description = "Command-line client for interacting with Pydio Cells";
+      homepage = "https://github.com/pydio/cells-client";
+      license = licenses.agpl3Plus;
+      maintainers = with maintainers; [ cristianoliveira ];
+      mainProgram = "cec";
+      platforms = platforms.linux ++ platforms.darwin;
+    };
+  };
+
 in {
   default = cells;
   cells = cells;
   "cells-fuse" = cellsFuse;
   "protoc-gen-go-client-stub" = protocGenGoClientStub;
   "protoc-gen-go-enhanced-grpc" = protocGenGoEnhancedGrpc;
+  "cells-client" = cellsClient;
 }
