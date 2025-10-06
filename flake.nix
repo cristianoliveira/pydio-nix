@@ -13,11 +13,13 @@
         lib = pkgs.lib;
 
         metadata = import ./nix/metadata.nix;
-        src = pkgs.fetchFromGitHub metadata.source;
-        buildRevision = src.rev or metadata.source.rev;
+        srcs = {
+          cells = pkgs.fetchFromGitHub metadata.cells.source;
+          cells-client = pkgs.fetchFromGitHub metadata."cells-client".source;
+        };
 
         packageSet = import ./nix/packages/default.nix {
-          inherit pkgs lib metadata src buildRevision;
+          inherit pkgs lib metadata srcs;
         };
       in {
         packages = packageSet;

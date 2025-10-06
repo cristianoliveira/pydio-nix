@@ -27,6 +27,7 @@ The flake exports several build outputs:
 - `nix build .#cells-fuse` – offline FUSE helper to mount datasources.
 - `nix build .#protoc-gen-go-client-stub` – protoc plugin for generating Cells-specific client stubs.
 - `nix build .#protoc-gen-go-enhanced-grpc` – protoc plugin providing enhanced gRPC helpers.
+- `nix build .#cells-client` – cross-platform CLI (`cec`) to interact with a Cells server.
 
 ### Installing
 
@@ -37,6 +38,7 @@ nix profile install .#cells
 nix profile install .#cells-fuse
 nix profile install .#protoc-gen-go-client-stub
 nix profile install .#protoc-gen-go-enhanced-grpc
+nix profile install .#cells-client
 ```
 
 ### Build the binary
