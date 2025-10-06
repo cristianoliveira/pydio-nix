@@ -6,14 +6,12 @@ Nix flake packaging for [Pydio Cells](https://github.com/pydio/cells), a self-ho
 
 - [Overview](#overview) – project goal and upstream reference
 - [Packages](#packages) – binary outputs and installation commands
-- [Installing](#installing)
+- [Installing](#installing) – profile commands and flake integration
 - [Build the binary](#build-the-binary)
 - [Run the server](#run-the-server)
 - [Dev shell](#dev-shell)
 - [Upgrading Pydio Cells](#upgrading-pydio-cells)
 - [Repository layout](#repository-layout)
-- [Use as dependency](#use-as-dependency)
-
 ## Overview
 
 This repository offers an opinionated flake that builds the Pydio Cells server as a Go module using `nix build`. It fetches the upstream `v4.4.15` release, wires in the vendor dependencies, and exposes the resulting `cells` binary as the default package output.
@@ -41,6 +39,63 @@ nix profile install .#protoc-gen-go-client-stub
 nix profile install .#protoc-gen-go-enhanced-grpc
 nix profile install .#cells-client
 ```
+
+#### Use as dependency
+
+Import this flake from another `flake.nix` to reuse the packages:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    pydio.url = "github:cristianoliveira/pydio-nix";
+  };
+
+  outputs = { self, nixpkgs, pydio, ... }@inputs:
+    let
+      system = "x86_64-linux"; # or inherit via flake-utils
+      pkgs = import nixpkgs { inherit system; };
+      pydioPkgs = pydio.packages.${system};
+    in {
+      packages.${system} = {
+        inherit (pydioPkgs) cells cells-fuse cells-client;
+      };
+
+      apps.${system}.cec = {
+        type = "app";
+        program = "${pydioPkgs."cells-client"}/bin/cec";
+      };
+    };
+}
+```
+
+Replace `system` with the platform(s) you target or wrap the outputs using `flake-utils` for multi-platform support.
+
+##### As an overlay
+
+You can also consume the packages through the provided overlay, which adds a `pydio` attribute to your package set:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    pydio.url = "github:cristianoliveira/pydio-nix";
+  };
+
+  outputs = { self, nixpkgs, pydio, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ pydio.overlays.default ];
+      };
+    in {
+      packages.${system}.cells = pkgs.pydio.cells;
+    };
+}
+```
+
+The overlay exposes all packaged binaries under `pkgs.pydio` (e.g. `pkgs.pydio."cells-client"`).
 
 ### Build the binary
 
