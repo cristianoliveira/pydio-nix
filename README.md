@@ -33,11 +33,11 @@ The flake exports several build outputs:
 Install any of them into your user profile with:
 
 ```
-nix profile install .#cells
-nix profile install .#cells-fuse
-nix profile install .#protoc-gen-go-client-stub
-nix profile install .#protoc-gen-go-enhanced-grpc
-nix profile install .#cells-client
+nix profile install github:cristianoliveira/pydio-nix#cells
+nix profile install github:cristianoliveira/pydio-nix#cells-fuse
+nix profile install github:cristianoliveira/pydio-nix#protoc-gen-go-client-stub
+nix profile install github:cristianoliveira/pydio-nix#protoc-gen-go-enhanced-grpc
+nix profile install github:cristianoliveira/pydio-nix#cells-client
 ```
 
 #### Use as dependency
