@@ -113,6 +113,32 @@ Import this flake from another `flake.nix` to reuse the packages:
 
 Replace `system` with the platform(s) you target or wrap the outputs using `flake-utils` for multi-platform support.
 
+### As an overlay
+
+You can also consume the packages through the provided overlay, which adds a `pydio` attribute to your package set:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    pydio.url = "github:cristianoliveira/pydio-nix";
+  };
+
+  outputs = { self, nixpkgs, pydio, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ pydio.overlays.default ];
+      };
+    in {
+      packages.${system}.cells = pkgs.pydio.cells;
+    };
+}
+```
+
+The overlay exposes all packaged binaries under `pkgs.pydio` (e.g. `pkgs.pydio."cells-client"`).
+
 ## License
 
 Pydio Cells is licensed under the AGPL-3.0-or-later. This repository only contains packaging metadata; refer to upstream for license details.
