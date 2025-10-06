@@ -2,16 +2,22 @@
 let
   cellsMeta = metadata.cells;
   cellsSrc = srcs.cells;
-  buildRevision = cellsSrc.rev or cellsMeta.source.rev;
+  cellsBuildRevision = cellsSrc.rev or cellsMeta.source.rev;
+
+  cellsV5Meta = metadata."cells-v5";
+  cellsV5Src = srcs."cells-v5";
+  cellsV5BuildRevision = cellsV5Src.rev or cellsV5Meta.source.rev;
 
   cellsPkg = import ./cells.nix {
-    inherit pkgs lib buildRevision;
+    inherit pkgs lib;
+    buildRevision = cellsBuildRevision;
     metadata = cellsMeta;
     src = cellsSrc;
   };
 
   cellsFusePkg = import ./cells-fuse.nix {
-    inherit pkgs lib buildRevision;
+    inherit pkgs lib;
+    buildRevision = cellsBuildRevision;
     metadata = cellsMeta;
     src = cellsSrc;
   };
@@ -34,6 +40,13 @@ let
     src = srcs."cells-client";
   };
 
+  cellsV5Pkg = import ./cells.nix {
+    inherit pkgs lib;
+    buildRevision = cellsV5BuildRevision;
+    metadata = cellsV5Meta;
+    src = cellsV5Src;
+  };
+
 in {
   default = cellsPkg;
   cells = cellsPkg;
@@ -41,4 +54,5 @@ in {
   "protoc-gen-go-client-stub" = protocClientStubPkg;
   "protoc-gen-go-enhanced-grpc" = protocEnhancedGrpcPkg;
   "cells-client" = cellsClientPkg;
+  "cells-v5" = cellsV5Pkg;
 }

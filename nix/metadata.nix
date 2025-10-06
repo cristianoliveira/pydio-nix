@@ -30,4 +30,21 @@
     };
     vendorHash = "sha256-7duLwaSdMhSQL1+4mSI91Z5aNsVbt4s+hjbRRS4SQTI=";
   };
+
+  "cells-v5" = let
+    version = "5.0.0-dev";
+    rev = "be8813d0bdaf6ee8a3fa8bdb298c4034572feaaa";
+  in {
+    inherit version;
+    buildStamp = "2025-10-03T13:23:04Z";
+    source = {
+      owner = "pydio";
+      repo = "cells";
+      inherit rev;
+      sha256 = "0m3n7qc0mqnmcak8v6prj4f4akaar01igrk9vx1sgjp808rbfdag";
+    };
+    vendorHashes = {
+      cells = "sha256-4F6XbtpSojYqREenMMCxndxm7dQpsvbMwMxyyjDCF8M=";
+    };
+  };
 }

@@ -19,6 +19,7 @@
         srcs = {
           cells = pkgs.fetchFromGitHub metadata.cells.source;
           cells-client = pkgs.fetchFromGitHub metadata."cells-client".source;
+          "cells-v5" = pkgs.fetchFromGitHub metadata."cells-v5".source;
         };
 
         packageSet = import ./nix/packages/default.nix {
