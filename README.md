@@ -12,6 +12,7 @@ Nix flake packaging for [Pydio Cells](https://github.com/pydio/cells), a self-ho
 - [Dev shell](#dev-shell)
 - [Upgrading Pydio Cells](#upgrading-pydio-cells)
 - [Repository layout](#repository-layout)
+- [Use as dependency](#use-as-dependency)
 
 ## Overview
 
@@ -80,6 +81,37 @@ The development shell also brings in `protobuf` for working with the protoc plug
 - `nix/metadata.nix` – shared version, source and vendor hash metadata.
 - `nix/packages/` – package definitions for the Cells binaries and protoc helpers.
 - `nix/devshell.nix` – development shell configuration.
+
+## Use as dependency
+
+Import this flake from another `flake.nix` to reuse the packages:
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    pydio.url = "github:cristianoliveira/pydio-nix";
+  };
+
+  outputs = { self, nixpkgs, pydio, ... }@inputs:
+    let
+      system = "x86_64-linux"; # or inherit via flake-utils
+      pkgs = import nixpkgs { inherit system; };
+      pydioPkgs = pydio.packages.${system};
+    in {
+      packages.${system} = {
+        inherit (pydioPkgs) cells cells-fuse cells-client;
+      };
+
+      apps.${system}.cec = {
+        type = "app";
+        program = "${pydioPkgs."cells-client"}/bin/cec";
+      };
+    };
+}
+```
+
+Replace `system` with the platform(s) you target or wrap the outputs using `flake-utils` for multi-platform support.
 
 ## License
 
