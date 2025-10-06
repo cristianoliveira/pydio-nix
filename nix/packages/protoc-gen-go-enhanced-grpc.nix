@@ -4,8 +4,7 @@ let
 in
 pkgs.buildGoModule {
   pname = "pydio-protoc-gen-go-enhanced-grpc";
-  inherit version;
-  src = src;
+  inherit version src;
 
   modRoot = "cmd/protoc-gen-go-enhanced-grpc";
   subPackages = [ "." ];

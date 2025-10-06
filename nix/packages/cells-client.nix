@@ -5,8 +5,7 @@ let
 in
 pkgs.buildGoModule {
   pname = "pydio-cells-client";
-  inherit version;
-  src = src;
+  inherit version src;
 
   inherit vendorHash;
   subPackages = [ "." ];
