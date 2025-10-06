@@ -5,8 +5,7 @@ let
 in
 pkgs.buildGoModule rec {
   pname = "pydio-cells-fuse";
-  inherit version;
-  src = src;
+  inherit version src;
 
   modRoot = "cmd/cells-fuse";
   subPackages = [ "." ];
