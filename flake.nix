@@ -28,7 +28,10 @@
       in {
         packages = packageSet;
 
-        devShells.default = import ./nix/devshell.nix { inherit pkgs; };
+        devShells = rec {
+          default = import ./nix/devshell.nix { inherit pkgs; };
+          cells = default;
+        };
       }
     ) // {
       overlays.default = overlay;
