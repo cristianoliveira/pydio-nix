@@ -20,6 +20,7 @@
           cells = pkgs.fetchFromGitHub metadata.cells.source;
           cells-client = pkgs.fetchFromGitHub metadata."cells-client".source;
           "cells-v5" = pkgs.fetchFromGitHub metadata."cells-v5".source;
+          "cells-nightly" = pkgs.fetchFromGitHub metadata."cells-nightly".source;
         };
 
         packageSet = import ./nix/packages/default.nix {

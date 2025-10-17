@@ -8,6 +8,10 @@ let
   cellsV5Src = srcs."cells-v5";
   cellsV5BuildRevision = cellsV5Src.rev or cellsV5Meta.source.rev;
 
+  cellsNightlyMeta = metadata."cells-nightly";
+  cellsNightlySrc = srcs."cells-nightly";
+  cellsNightlyBuildRevision = cellsNightlySrc.rev or cellsNightlyMeta.source.rev;
+
   cellsPkg = import ./cells.nix {
     inherit pkgs lib;
     buildRevision = cellsBuildRevision;
@@ -47,6 +51,13 @@ let
     src = cellsV5Src;
   };
 
+  cellsNightlyPkg = import ./cells.nix {
+    inherit pkgs lib;
+    buildRevision = cellsNightlyBuildRevision;
+    metadata = cellsNightlyMeta;
+    src = cellsNightlySrc;
+  };
+
 in {
   default = cellsPkg;
   cells = cellsPkg;
@@ -55,4 +66,5 @@ in {
   "protoc-gen-go-enhanced-grpc" = protocEnhancedGrpcPkg;
   "cells-client" = cellsClientPkg;
   "cells-v5" = cellsV5Pkg;
+  "cells-nightly" = cellsNightlyPkg;
 }

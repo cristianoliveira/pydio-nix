@@ -28,6 +28,7 @@ The flake exports several build outputs:
 - `nix build .#protoc-gen-go-enhanced-grpc` – protoc plugin providing enhanced gRPC helpers.
 - `nix build .#cells-client` – cross-platform CLI (`cec`) to interact with a Cells server.
 - `nix build .#cells-v5` – bleeding-edge Cells server from the `v5-dev` branch.
+- `nix build .#cells-nightly` – nightly build alias of the `v5-dev` branch.
 
 ### Installing
 
@@ -40,6 +41,7 @@ nix profile install github:cristianoliveira/pydio-nix#protoc-gen-go-client-stub
 nix profile install github:cristianoliveira/pydio-nix#protoc-gen-go-enhanced-grpc
 nix profile install github:cristianoliveira/pydio-nix#cells-client
 nix profile install github:cristianoliveira/pydio-nix#cells-v5
+nix profile install github:cristianoliveira/pydio-nix#cells-nightly
 ```
 
 #### Use as dependency
