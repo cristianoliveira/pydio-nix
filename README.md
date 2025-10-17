@@ -129,6 +129,48 @@ The development shell also brings in `protobuf` for working with the protoc plug
 
 ## Upgrading Pydio Cells
 
+### Update workflow for tagged releases
+
+1. Bump the release metadata in `nix/metadata.nix` (`cells` and friends) with the new tag and commit.
+2. Recompute the tarball hash, for example:
+   ```
+   nix-prefetch-url --unpack https://github.com/pydio/cells/archive/refs/tags/vX.Y.Z.tar.gz
+   ```
+3. Temporarily set `vendorHash = lib.fakeSha256;` (or `null`) for the package you are updating.
+4. Run `nix build .#cells --no-write-lock-file` to capture the new vendor hash from the build failure output.
+5. Replace the vendor hash, rebuild to confirm, and commit the metadata changes.
+
+### Update workflow for nightly builds (`cells-nightly` / `cells-v5`)
+
+1. Choose the new commit on `v5-dev` (e.g. via `git ls-remote https://github.com/pydio/cells`).
+2. Update `rev`, `buildStamp`, and `version` (if desired) in the relevant entry in `nix/metadata.nix`.
+3. Refresh the source hash:
+   ```
+   nix-prefetch-url --unpack https://github.com/pydio/cells/archive/<commit>.tar.gz
+   ```
+4. Reset the nightly package's `vendorHash` to `lib.fakeSha256` and run `nix build .#cells-nightly --no-write-lock-file`.
+5. Record the new vendor hash from the error message, rebuild to verify, then commit.
+
+
+### Helper scripts
+
+Two helper scripts live in `scripts/` for automating the metadata refresh:
+
+- `scripts/update-cells-tag.sh pydio/cells vX.Y.Z` – emits commit, build stamp, and tarball hash for a released tag.
+- `scripts/update-cells-branch.sh pydio/cells v5-dev` – tracks a branch (e.g. nightly builds) and prints the snippet to paste into `nix/metadata.nix`.
+
+Both scripts recompute the source hash using `nix-prefetch-url` so you only need to plug the results into the metadata file before capturing the vendor hash via `nix build`.
+
+You can also call them via the project Makefile:
+
+```
+make update-tag TAG=v4.4.16
+make update-branch BRANCH=v5-dev
+```
+
+
+
+
 1. Update the `version` in `flake.nix` and adjust the `rev` if the tag naming changes.
 2. Fetch the new source hash: `nix-prefetch-url --unpack https://github.com/pydio/cells/archive/refs/tags/vX.Y.Z.tar.gz`.
 3. Build once with `vendorHash = lib.fakeSha256;` to capture the new vendor hash from the build failure output, then replace it.
